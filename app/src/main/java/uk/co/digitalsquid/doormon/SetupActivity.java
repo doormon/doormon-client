@@ -1,9 +1,11 @@
 package uk.co.digitalsquid.doormon;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +33,7 @@ public class SetupActivity extends ActionBarActivity {
     public static final String TAG = "Doormon";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final String REGISTER_URL = "https://doormon-server.appspot.com/register/mobile/%s/";
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -45,6 +48,7 @@ public class SetupActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+        context = getBaseContext();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -206,12 +210,6 @@ public class SetupActivity extends ActionBarActivity {
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
 
-                    // You should send the registration ID to your server over HTTP,
-                    // so it can use GCM/HTTP or CCS to send messages to your app.
-                    // The request to your server should be authenticated if your app
-                    // is using accounts.
-                    sendRegistrationIdToBackend();
-
                     // For this demo: we don't need to send it because the device
                     // will send upstream messages to a server that echo back the
                     // message using the 'from' address in the message.
@@ -230,11 +228,22 @@ public class SetupActivity extends ActionBarActivity {
             @Override
             protected void onPostExecute(String msg) {
                 Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+
+                // You should send the registration ID to your server over HTTP,
+                // so it can use GCM/HTTP or CCS to send messages to your app.
+                // The request to your server should be authenticated if your app
+                // is using accounts.
+                sendRegistrationIdToBackend();
             }
         }.execute(null, null, null);
     }
 
     private void sendRegistrationIdToBackend() {
-        // TODO: Make query to server
+        Toast.makeText(this,
+                "Please register your device with the server (log into your Google account",
+                Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(String.format(REGISTER_URL, regid)));
+        startActivity(intent);
     }
 }
