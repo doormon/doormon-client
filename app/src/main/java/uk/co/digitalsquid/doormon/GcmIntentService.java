@@ -5,8 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -60,17 +60,25 @@ public class GcmIntentService extends IntentService {
     private void handleMessage(Bundle extras) {
         String type = extras.getString("type", "invalid");
         String state = extras.getString("state", "invalid");
+        String videoUri = extras.getString("video_uri", "");
         if (type.equals("door")) {
-            sendDoorNotification(state);
+            sendDoorNotification(state, videoUri);
         }
     }
 
-    private void sendDoorNotification(String state) {
+    private void sendDoorNotification(String state, String videoUri) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        Intent innerIntent = null;
+        if (videoUri.equals("")) {
+            innerIntent = new Intent(this, SetupActivity.class);
+        } else {
+            innerIntent = new Intent(this, CameraActivity.class);
+        }
+        innerIntent.setData(Uri.parse(videoUri));
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, SetupActivity.class), 0);
+                innerIntent, 0);
 
         int title_id = R.string.notification_unknown;
         if (state.equals("open")) {

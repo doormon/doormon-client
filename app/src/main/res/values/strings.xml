@@ -7,5 +7,6 @@
     <string name="notification_open">Door open!</string>
     <string name="notification_closed">Door closed</string>
     <string name="notification_unknown">Something happened...</string>
+    <string name="title_activity_camera">Webcam view</string>
 
 </resources>
