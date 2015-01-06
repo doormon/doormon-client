@@ -81,16 +81,19 @@ public class GcmIntentService extends IntentService {
                 innerIntent, 0);
 
         int title_id = R.string.notification_unknown;
+        int icon_id = R.drawable.notif_open;
         if (state.equals("open")) {
             title_id = R.string.notification_open;
+            icon_id = R.drawable.notif_open;
         } else if (state.equals("closed")) {
             title_id = R.string.notification_closed;
+            icon_id = R.drawable.notif_close;
         }
 
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setSmallIcon(icon_id)
                         .setContentTitle(getResources().getString(title_id));
 
         mBuilder.setContentIntent(contentIntent);
