@@ -43,7 +43,6 @@
         <activity
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera"
-            android:screenOrientation="landscape"
             android:parentActivityName=".SetupActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
