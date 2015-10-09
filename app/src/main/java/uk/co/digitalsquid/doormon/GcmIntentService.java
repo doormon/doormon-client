@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -90,11 +91,14 @@ public class GcmIntentService extends IntentService {
             icon_id = R.drawable.notif_close;
         }
 
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(icon_id)
-                        .setContentTitle(getResources().getString(title_id));
+                        .setContentTitle(getResources().getString(title_id))
+                        .setSound(soundUri)
+                        .setVibrate(new long[] {0, 1000, 1000, 1000});
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
